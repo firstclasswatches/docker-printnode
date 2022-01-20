@@ -1,9 +1,9 @@
-FROM ubuntu:20.04
-LABEL maintainer="me@drewzh.com"
+FROM debian:10
+LABEL maintainer="dev@atlascoffeeclub.com"
 
 ADD run.sh /root/
 
-RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
+RUN ln -fs /usr/share/zoneinfo/America/Chicago /etc/localtime
 
 RUN apt-get update
 
@@ -13,7 +13,7 @@ RUN apt-get install -y curl cups cups-pdf avahi-daemon && \
 
 # Setup PrintNode
 RUN mkdir /usr/local/PrintNode && \
-    curl -s https://dl.printnode.com/client/printnode/4.24.1/PrintNode-4.24.1-ubuntu-20.04-x86_64.tar.gz | \
+    curl -s https://dl.printnode.com/client/printnode/4.26.10/PrintNode-4.26.10-debian_10-x86_64.tar.gz | \
     tar -xz -C /usr/local/PrintNode --strip-components 1
 
 # Remove backends that aren't needed
