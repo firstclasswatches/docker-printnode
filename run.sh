@@ -9,7 +9,6 @@ fi
 
 echo $CUPS_USER:$CUPS_PASSWORD | chpasswd
 
-/usr/sbin/avahi-daemon --daemonize
 /usr/sbin/cupsd
 
 exec /usr/local/PrintNode/PrintNode \
