@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 debian:11
+FROM debian:11
 LABEL maintainer="dev@atlascoffeeclub.com"
 
 ADD run.sh /root/
@@ -7,7 +7,7 @@ RUN ln -fs /usr/share/zoneinfo/America/Chicago /etc/localtime
 
 RUN apt-get update
 
-RUN apt-get install -y curl cups cups-pdf && \
+RUN apt-get install -y curl cups cups-pdf cups-client cups-bsd cups-ipp-utils libcups2-dev && \
     apt-get clean && \
     find /var/lib/apt/lists -type f -delete
 
