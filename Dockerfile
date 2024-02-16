@@ -1,9 +1,9 @@
-FROM debian:11
-LABEL maintainer="dev@atlascoffeeclub.com"
+FROM ubuntu:22.04
+LABEL maintainer="scott@firstclasswatches.co.uk"
 
 ADD run.sh /root/
 
-RUN ln -fs /usr/share/zoneinfo/America/Chicago /etc/localtime
+RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
 
 RUN apt-get update
 
@@ -13,7 +13,7 @@ RUN apt-get install -y curl cups cups-pdf cups-client cups-bsd cups-ipp-utils li
 
 # Setup PrintNode
 RUN mkdir /usr/local/PrintNode && \
-    curl -s https://dl.printnode.com/client/printnode/4.26.12/PrintNode-4.26.12-debian_10-x86_64.tar.gz | \
+    curl -s https://dl.printnode.com/client/printnode/4.27.8/PrintNode-4.27.8-ubuntu-22.04-x86_64.tar.gz | \
     tar -xz -C /usr/local/PrintNode --strip-components 1
 
 # Remove backends that aren't needed
