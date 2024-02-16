@@ -1,17 +1,28 @@
 
 # Installation
 
-Make sure to create a named volume to store your CUPS configuration. Pre-defining an empty named volume with for e.g `docker create volume printnode` will allow /etc/cups directory to be copied over into the new volume. Failure to provide a working CUPS configuration directory will result in a broken container.
+Make sure to create a named volume to store your CUPS configuration. Pre-defining an empty named volume with for e.g `docker volume create printnode` will allow /etc/cups directory to be copied over into the new volume. Failure to provide a working CUPS configuration directory will result in a broken container.
+
+# Build Image
 
 ```bash
-docker run \
--e PRINT_CLIENT_EMAIL='a@b.c' \
--e PRINT_CLIENT_PASSWORD='123abc' \
+cd printnode
+docker build -t printnode .
+```
+
+# Run Image
+
+```bash
+docker run -d \
+-e PRINT_CLIENT_EMAIL='test@example.com' \
+-e PRINT_CLIENT_PASSWORD='printnode' \
 -e CUPS_USER='admin' \
--e CUPS_PASSWORD='123abc' \
---network='host' \
---volume printnode:/etc/cups \
-drewzh/printnode
+-e CUPS_PASSWORD='printnode' \
+--network='bridge' \
+-p 631:631 \
+-p 8888:8888 \
+--restart unless-stopped \
+printnode
 ```
 
 # Environment Variables
@@ -26,6 +37,6 @@ drewzh/printnode
 To add printers, you can use IPP (which negates the need for drivers) by attaching to the running container and running something like the following:
 
 ```bash
-lpadmin -p LabelPrinter -E -v ipp://192.168.86.44/ipp -m everywhere
-lpadmin -p LaserPrinter -E -v ipp://192.168.86.54/ipp -m everywhere
+docker container exec CONTAINER lpadmin -p LabelPrinter -E -v ipp://192.168.86.44/ipp -m everywhere
+docker container exec CONTAINER lpadmin -p LaserPrinter -E -v ipp://192.168.86.54/ipp -m everywhere
 ```
