@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM debian:11-slim
 LABEL maintainer="scott@firstclasswatches.co.uk"
 
 ADD run.sh /root/
@@ -12,9 +12,18 @@ RUN apt-get install -y curl cups cups-pdf cups-client cups-bsd cups-ipp-utils li
     find /var/lib/apt/lists -type f -delete
 
 # Setup PrintNode
-RUN mkdir /usr/local/PrintNode && \
-    curl -s https://dl.printnode.com/client/printnode/4.27.8/PrintNode-4.27.8-ubuntu-22.04-x86_64.tar.gz | \
-    tar -xz -C /usr/local/PrintNode --strip-components 1
+RUN dpkgArch="$(dpkg --print-architecture)"; \
+    mkdir /usr/local/PrintNode && \
+    case "$dpkgArch" in \
+        amd64) file="https://dl.printnode.com/client/printnode/4.26.12/PrintNode-4.26.12-debian_10-x86_64.tar.gz";; \
+        arm64) file="https://dl.printnode.com/client/printnode/4.27.8/PrintNode-4.27.8-pi-bullseye-aarch64.tar.gz";; \
+        armhf) file="https://dl.printnode.com/client/printnode/4.27.8/PrintNode-4.27.8-pi-bullseye-armv7l.tar.gz";; \
+        armel) file="https://dl.printnode.com/client/printnode/4.27.8/PrintNode-4.27.8-pi-bullseye-armv7l.tar.gzz";; \
+        *) echo $dpkgArch "unsupported architecture"; exit 1 ;; \
+    esac; \
+    curl -s -o /root/PrintNode.tar.gz $file && \
+    tar -xz -C /usr/local/PrintNode --strip-components 1 -f /root/PrintNode.tar.gz && \
+    rm /root/PrintNode.tar.gz
 
 # Remove backends that aren't needed
 RUN rm /usr/lib/cups/backend/parallel \

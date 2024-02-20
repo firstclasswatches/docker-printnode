@@ -3,11 +3,12 @@
 
 Make sure to create a named volume to store your CUPS configuration. Pre-defining an empty named volume with for e.g `docker volume create printnode` will allow /etc/cups directory to be copied over into the new volume. Failure to provide a working CUPS configuration directory will result in a broken container.
 
-# Build Image
+# Build Multi-Platform Image
 
 ```bash
 cd printnode
-docker build -t printnode .
+docker buildx create --use
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 -t scottie1010/printnode:0.0.2 -t scottie1010/printnode:latest .
 ```
 
 # Run Image
