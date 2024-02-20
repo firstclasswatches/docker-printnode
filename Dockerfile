@@ -1,4 +1,4 @@
-FROM debian:11-slim
+FROM dtcooper/raspberrypi-os:bullseye
 LABEL maintainer="scott@firstclasswatches.co.uk"
 
 ADD run.sh /root/
